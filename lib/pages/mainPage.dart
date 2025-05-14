@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:stress_count_app/model/tiplist.dart';
 
 class StressMainPage extends StatefulWidget {
@@ -58,6 +59,7 @@ class _StressMainPageState extends State<StressMainPage> {
       _mybox.put('todayCount', 0);
       _mybox.put('lastDate', today);
       stressCount = 0;
+      _mybox.put('yesterdayCount', previousCount);
     }
   }
 
@@ -70,15 +72,25 @@ class _StressMainPageState extends State<StressMainPage> {
   }
 
   String getEmotionLabel(int count) {
-    if (count < 10) return '😌 오늘은 아직 여유 있어요';
-    if (count < 20) return '😣 조금 지치고 있어요';
-    if (count < 30) return '😫 꽤 스트레스를 받았네요';
-
+    if (count == 0) return '😊 오늘은 스트레스 없이 평온했어요';
+    if (count <= 3) return '😌 거의 스트레스 없이 지냈어요';
+    if (count <= 7) return '😣 조금 지치고 있어요';
+    if (count <= 12) return '😫 오늘은 꽤 힘든 하루였네요';
     return '😡 오늘 정말 많이 힘들었어요';
+  }
+
+  String getFeedbackMessage(int todayCount, int? yesterdayCount) {
+    if (yesterdayCount == null) return '📝 스트레스를 기록하는 것만으로도 멋져요!';
+
+    int diff = todayCount - yesterdayCount;
+    if (diff == 0) return '📘 어제와 비슷한 하루였어요';
+    if (diff > 0) return '📈 어제보다 $diff번 더 스트레스를 받았어요';
+    return '📉 어제보다 ${-diff}번 덜 스트레스를 받았어요';
   }
 
   @override
   Widget build(BuildContext context) {
+    final int? yesterdayCount = _mybox.get('yesterdayCount');
     return Scaffold(
       backgroundColor: Color(0xFFFFF8F2), //살구빛 배경
       appBar: stressMainPageAppBar(),
@@ -88,15 +100,31 @@ class _StressMainPageState extends State<StressMainPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Spacer(),
+
               imoji(),
               stressShowText(),
+              SizedBox(height: 12),
+              feedbackMessage(yesterdayCount),
               SizedBox(height: 20),
               stressPushButton(),
               Spacer(),
+
               tipcard(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  //Feddback 메세지
+  Text feedbackMessage(int? yesterdayCount) {
+    return Text(
+      getFeedbackMessage(stressCount, yesterdayCount),
+      style: GoogleFonts.notoSansKr(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w500,
+        color: Colors.grey[700],
       ),
     );
   }
