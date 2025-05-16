@@ -97,22 +97,25 @@ class _StressMainPageState extends State<StressMainPage> {
       body: SafeArea(
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Spacer(),
-
+              Lottie.network(
+                'https://lottie.host/8ead3e9f-961a-4e48-a77b-3cd2d2a2973a/y1lBQNflYI.json',
+              ),
               imoji(),
               stressShowText(),
               SizedBox(height: 12),
               feedbackMessage(yesterdayCount),
-              SizedBox(height: 20),
+              SizedBox(height: 24),
               stressPushButton(),
-              Spacer(),
-
-              tipcard(),
+              SizedBox(height: 48),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 24.0, right: 48.0, left: 48.0),
+        child: tipcard(),
       ),
     );
   }
