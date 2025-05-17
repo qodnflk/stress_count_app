@@ -91,6 +91,8 @@ class _StressMainPageState extends State<StressMainPage> {
   @override
   Widget build(BuildContext context) {
     final int? yesterdayCount = _mybox.get('yesterdayCount');
+    final String url =
+        'https://lottie.host/8ead3e9f-961a-4e48-a77b-3cd2d2a2973a/y1lBQNflYI.json'; //lottie network 경로로
     return Scaffold(
       backgroundColor: Color(0xFFFFF8F2), //살구빛 배경
       appBar: stressMainPageAppBar(),
@@ -99,9 +101,7 @@ class _StressMainPageState extends State<StressMainPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Lottie.network(
-                'https://lottie.host/8ead3e9f-961a-4e48-a77b-3cd2d2a2973a/y1lBQNflYI.json',
-              ),
+              Lottie.network(url),
               imoji(),
               stressShowText(),
               SizedBox(height: 12),
@@ -195,7 +195,8 @@ class _StressMainPageState extends State<StressMainPage> {
         onPressed: () {
           addStressCount();
         },
-        label: Text('🧘 스트레스 받았어요'),
+        icon: Text('😣'),
+        label: Text('스트레스 받았어요', style: TextStyle(fontWeight: FontWeight.bold)),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.redAccent,
           foregroundColor: Colors.white,

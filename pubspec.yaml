@@ -61,8 +61,9 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter_icons:
   android: true
-  ios: false
+  ios: true
   image_path: "assets/icon/icon.png"
+  
 
 flutter:
 

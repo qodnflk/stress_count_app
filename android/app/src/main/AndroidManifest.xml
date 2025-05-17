@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="stress_count_app"
+        android:label="마음 카운트"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
