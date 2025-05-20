@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:stress_count_app/model/ad_mobile.dart';
 import 'package:stress_count_app/model/tiplist.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class StressMainPage extends StatefulWidget {
   const StressMainPage({super.key});
@@ -16,6 +18,7 @@ class _StressMainPageState extends State<StressMainPage> {
   int stressCount = 0;
   String currentTip = '';
   final _mybox = Hive.box('databox');
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
@@ -23,6 +26,16 @@ class _StressMainPageState extends State<StressMainPage> {
     checkRestForNewDay();
     stressCount = _mybox.get('todayCount', defaultValue: 0);
     currentTip = tip.getRandomTip();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    _bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: AdmobService.bannerAdUnitId!,
+      listener: AdmobService.bannerAdListener,
+      request: const AdRequest(),
+    )..load();
   }
 
   void checkRestForNewDay() {
@@ -108,15 +121,21 @@ class _StressMainPageState extends State<StressMainPage> {
               feedbackMessage(yesterdayCount),
               SizedBox(height: 24),
               stressPushButton(),
-              SizedBox(height: 48),
+              SizedBox(height: 20),
+              tipcard(),
+              SizedBox(height: 12),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 24.0, right: 48.0, left: 48.0),
-        child: tipcard(),
-      ),
+      bottomNavigationBar:
+          _bannerAd == null
+              ? Container()
+              : Container(
+                margin: EdgeInsets.only(bottom: 12),
+                height: 50,
+                child: AdWidget(ad: _bannerAd!),
+              ),
     );
   }
 
